@@ -1,0 +1,39 @@
+Databricks as a leading AI and data platform and its benefits for handling large-scale data.
+It then sets up a project scenario for an e-commerce company facing scalability issues with their existing ETL pipelines.
+
+Databricks account and explores the Databricks UI, including uploading data (a movies.csv file), using the SQL editor, connecting to a serverless compute, and interacting with the AI assistant (Genie
+
+Finally, it dives into Spark DataFrame basics using PySpark, covering operations like creating DataFrames, inspecting schema and data, column filtering, row filtering, creating new columns, and renaming columns. It also demonstrates how to read and write CSV files, specify schema, and save DataFrames in Parquet format. The section concludes with an explanation of distributed computing and the core concepts of Apache Spark (like lazy evaluation, transformations vs. actions, narrow vs. wide transformations) in comparison to traditional methods like Pandas.
+
+Here are some of the code and commands executed:
+
+Databricks UI / SQL Editor Commands:
+
+SELECT star FROM workspace.default.movies LIMIT 5
+SELECT count(*) FROM workspace.default.movies
+AI assistant prompt: "show me top five movies by IMDb rating"
+PySpark DataFrame Operations:
+
+spark - Displays the SparkSession object
+df = spark.table("workspace.default.movies") - Creates a DataFrame from a table
+df.show(5) - Displays the first 5 rows
+display(df) - Displays the DataFrame in a formatted table
+df.printSchema() - Prints the schema of the DataFrame
+df.count() - Returns the number of rows
+df.columns - Returns a list of column names
+df.describe() - Computes descriptive statistics for numeric columns
+display(df.describe()) - Displays descriptive statistics
+df.summary() - Computes extended descriptive statistics
+dft_trimmed = df.select("title", "studio", "imdb_rating") - Selects specific columns
+dft_trimmed.show(3, truncate=False) - Displays selected columns
+AI assistant prompt: "Show me all the movies released between 2000 to 2010" - Generates the filter code
+df_filtered = df.filter((col("release_year") >= 2000) & (col("release_year") <= 2010)) - Filters rows based on conditions
+df_filtered = df.filter(df["release_year"].between(2000, 2010)) - Another way to filter using between
+df_marvel = df.filter(col("studio") == "Marvel Studios") - Filters by studio
+unique_industries = df.select("industry").distinct() - Gets distinct values from a column
+display(unique_industries) - Displays distinct industries
+df_with_profit = df.withColumn("profit", col("revenue") - col("budget")) - Creates a new column
+df_renamed = df.withColumnRenamed("revenue", "total_revenue") - Renames a column
+df_renamed.printSchema() - Prints schema after renaming
+df = spark.read.csv("file_path", header=True, inferSchema=True) - Reads a CSV file with header and inferred schema
+df.write.mode("overwrite").parquet("file_path_output") - Writes DataFrame to Parquet format
