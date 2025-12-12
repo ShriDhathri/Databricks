@@ -1,0 +1,2 @@
+Unresolved logical plan --> Catalog (which will have info of our database,table etc which will create resolved logical plan) --> Resolved logical plans --> Optimized logical plan using Logical optimizer
+This query will get distributed in multiple physical device and will figure out which performance is best.
