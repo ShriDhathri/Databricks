@@ -24,11 +24,17 @@ df.columns - Returns a list of column names
 df.describe() - Computes descriptive statistics for numeric columns
 display(df.describe()) - Displays descriptive statistics
 df.summary() - Computes extended descriptive statistics
+
+
 dft_trimmed = df.select("title", "studio", "imdb_rating") - Selects specific columns
 dft_trimmed.show(3, truncate=False) - Displays selected columns
+
+
 AI assistant prompt: "Show me all the movies released between 2000 to 2010" - Generates the filter code
 df_filtered = df.filter((col("release_year") >= 2000) & (col("release_year") <= 2010)) - Filters rows based on conditions
 df_filtered = df.filter(df["release_year"].between(2000, 2010)) - Another way to filter using between
+
+
 df_marvel = df.filter(col("studio") == "Marvel Studios") - Filters by studio
 unique_industries = df.select("industry").distinct() - Gets distinct values from a column
 display(unique_industries) - Displays distinct industries
@@ -37,3 +43,15 @@ df_renamed = df.withColumnRenamed("revenue", "total_revenue") - Renames a column
 df_renamed.printSchema() - Prints schema after renaming
 df = spark.read.csv("file_path", header=True, inferSchema=True) - Reads a CSV file with header and inferred schema
 df.write.mode("overwrite").parquet("file_path_output") - Writes DataFrame to Parquet format
+
+SQL USING PYTHON:
+We can run SQL Commands even in the workspace like:
+df_marvel = spark.sql("Select * from workspace.defualt.movies where studios = 'Marvel Studios'")
+df_marvel.show()
+OR ELSE WE CAN ALSO EXECUTE SIMPLY BY USING %sql command and then write the query the reult will be stored in _sqldf which can be used later in the other Python or SQL cells
+
+
+
+
+
+
