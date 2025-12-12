@@ -1,0 +1,38 @@
+# To create a df
+
+from pyspark.sql import functions as F, types as T
+
+data = [
+  ("2017-01-01", 32.0,6.0, "Rain"),
+  ("2017-01-04", None, 9.0, "Snow"),
+  ("2017-01-05", 59.0, None, "Rain"),
+  ("2017-01-07", None, 9.0, None),
+  ("2017-01-08", None, None, None),
+  ("2017-01-09", 25.0, 2.0, "Snow"),
+  ("2017-01-10", 25.0, 14.0, "Sunny"),
+  ("2017-01-11", None, None, "Snow"),
+  ("2017-01-06", 40.0, 12.0, "Sunny")
+]
+
+schema = "day string, temperature double, windspeed double, event string"
+df = spark.createDataFrame(data,schema)
+df = df.withColumn("day", F.to_date("day","yyyy-MM-dd"))  #To normalize to DataType
+display(df)
+
+# In order to run the sql queries on the dataframe we need to create a view for that
+df.createOrReplaceTempView('Weather') #Session Scoped --> meant only for this notebook
+# df.createGlobalTempView('global_weather') #Global scoped --> meant for the whole cluster/workspace u can use this 'global_weather in other notebook also
+
+%sql
+SELECT event, ROUND(AVG(temperature), 1) AS avg_temp
+FROM weather
+GROUP BY event
+ORDER BY avg_temp DESC;
+
+spark.sql("""
+SELECT day, temperature, windspeed, event
+FROM weather
+WHERE temperature IS NOT NULL
+ORDER BY day
+""").show()
+
